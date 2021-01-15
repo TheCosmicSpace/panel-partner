@@ -1,3 +1,3 @@
 export enum MutationTypes {
-  SET_COUNTER = 'SET_COUNTER',
+  INC_COUNTER = "SET_COUNTER"
 }

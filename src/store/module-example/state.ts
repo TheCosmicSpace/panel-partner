@@ -1,5 +1,5 @@
-export const state = {
-  counter: 0,
-}
+// declare store
+export type State = { counter: number };
 
-export type State = typeof state
+// set state
+export const state: State = { counter: 1 };
