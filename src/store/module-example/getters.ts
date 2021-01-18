@@ -1,6 +1,6 @@
-import { GetterTree } from "vuex";
-import { RootState } from "..";
-import { State } from "./state";
+import { GetterTree } from 'vuex';
+import { RootState } from '..';
+import { State } from './state';
 
 // Getters types
 export type Getters = {
@@ -11,7 +11,7 @@ export type Getters = {
 
 export const getters: GetterTree<State, RootState> & Getters = {
   doubleCounter: state => {
-    console.log("state", state.counter);
+    console.log('state', state.counter);
     return state.counter * 2;
   }
 };

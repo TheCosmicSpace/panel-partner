@@ -1,16 +1,16 @@
-import { ActionContext, ActionTree } from "vuex";
-import { RootState } from "..";
-import { ActionTypes } from "./action-types";
-import { MutationTypes } from "./mutation-types";
-import { Mutations } from "./mutations";
-import { State } from "./state";
+import { ActionContext, ActionTree } from 'vuex';
+import { RootState } from '..';
+import { ActionTypes } from './action-types';
+import { MutationTypes } from './mutation-types';
+import { Mutations } from './mutations';
+import { State } from './state';
 
 type AugmentedActionContext = {
   commit<K extends keyof Mutations>(
     key: K,
     payload: Parameters<Mutations[K]>[1]
   ): ReturnType<Mutations[K]>;
-} & Omit<ActionContext<State, RootState>, "commit">;
+} & Omit<ActionContext<State, RootState>, 'commit'>;
 
 // actions interface
 

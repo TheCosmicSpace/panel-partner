@@ -1,23 +1,29 @@
 // init
-import { CommitOptions, createLogger, createStore, DispatchOptions, Store as VuexStore } from "vuex";
-import { counter } from "./module-example";
-import { Actions } from "./module-example/actions";
-import { Getters } from "./module-example/getters";
-import { Mutations } from "./module-example/mutations";
+import {
+  CommitOptions,
+  createLogger,
+  createStore,
+  DispatchOptions,
+  Store as VuexStore
+} from 'vuex';
+import { counter } from './module-example';
+import { Actions } from './module-example/actions';
+import { Getters } from './module-example/getters';
+import { Mutations } from './module-example/mutations';
 
-const debug: boolean = process.env.NODE_ENV !== "production";
+const debug: boolean = process.env.NODE_ENV !== 'production';
 export interface RootState {
   version: string;
 }
 
 const state: RootState = {
-  version: "1.0.0"
+  version: '1.0.0'
 };
 
 //setup store type
 export type Store = Omit<
   VuexStore<RootState>,
-  "commit" | "getters" | "dispatch"
+  'commit' | 'getters' | 'dispatch'
 > & {
   commit<K extends keyof Mutations, P extends Parameters<Mutations[K]>[1]>(
     key: K,

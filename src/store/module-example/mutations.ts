@@ -1,6 +1,6 @@
-import { MutationTree } from "vuex";
-import { MutationTypes } from "./mutation-types";
-import { State } from "./state";
+import { MutationTree } from 'vuex';
+import { MutationTypes } from './mutation-types';
+import { State } from './state';
 
 // Mutations Types
 export type Mutations<S = State> = {
