@@ -1,13 +1,16 @@
 <template>
-  <MainLayoutVue />
+  <MainLayoutVue v-if="false" />
+  <TemplateLayoutVue />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import MainLayoutVue from './layouts/MainLayout.vue';
+import TemplateLayoutVue from './layouts/TemplateLayout.vue';
 export default defineComponent({
   components: {
-    MainLayoutVue
+    MainLayoutVue,
+    TemplateLayoutVue
   },
   name: 'App'
 });
