@@ -21,7 +21,6 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const activeIndex = ref('1');
-
     const RoutesMap = new Map<string, string>([
       ['1', '/'],
       ['2', '/history'],
@@ -29,7 +28,7 @@ export default defineComponent({
       ['4', '/company-profile']
     ]);
 
-    const handleSelect = (key: string, keyPath: string[]): void => {
+    const handleSelect = (key: string) => {
       const routePath: string | undefined = RoutesMap.get(key);
       if (!routePath) return;
       activeIndex.value = key;
