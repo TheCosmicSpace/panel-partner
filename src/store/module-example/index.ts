@@ -1,16 +1,42 @@
-import { Module } from 'vuex';
+import {
+  Store as VuexStore,
+  CommitOptions,
+  DispatchOptions,
+  Module
+} from 'vuex';
+
+import { state } from './state';
+import { getters, Getters } from './getters';
+import { mutations, Mutations } from './mutations';
+import { actions, Actions } from './actions';
 import { RootState } from '..';
-import { actions } from './actions';
-import { getters } from './getters';
-import { mutations } from './mutations';
-import { state, State } from './state';
+import { State } from './state';
+export { State };
 
-const namespaced = true;
+export type CounterStore<S = State> = Omit<
+  VuexStore<S>,
+  'getters' | 'commit' | 'dispatch'
+> & {
+  commit<K extends keyof Mutations, P extends Parameters<Mutations[K]>[1]>(
+    key: K,
+    payload: P,
+    options?: CommitOptions
+  ): ReturnType<Mutations[K]>;
+} & {
+  dispatch<K extends keyof Actions>(
+    key: K,
+    payload: Parameters<Actions[K]>[1],
+    options?: DispatchOptions
+  ): ReturnType<Actions[K]>;
+} & {
+  getters: {
+    [K in keyof Getters]: ReturnType<Getters[K]>;
+  };
+};
 
-export const counter: Module<State, RootState> = {
-  namespaced,
+export const store: Module<State, RootState> = {
+  state,
   getters,
-  actions,
   mutations,
-  state
+  actions
 };
