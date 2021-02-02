@@ -157,7 +157,7 @@ import { defineComponent } from 'vue';
 export default defineComponent({
   setup() {
     function format(percentage: number) {
-      return percentage.toString();
+      return `${percentage}`;
     }
     return { format };
   },
