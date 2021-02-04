@@ -8,7 +8,7 @@ declare module '@vue/runtime-core' {
 }
 
 // Vuex@4.0.0-beta.1 is missing the typing for `useStore`. See https://github.com/vuejs/vuex/issues/1736
-import { createStore, useStore as useVuexStore } from 'vuex';
+import { useStore as useVuexStore } from 'vuex';
 
 export function useStore(): typeof store {
   return useVuexStore();
