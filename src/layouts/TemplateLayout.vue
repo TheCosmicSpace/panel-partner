@@ -1,37 +1,19 @@
 <template>
-  <!-- <el-row :gutter="10"> -->
-  <!-- <el-col :xs="6" :sm="6" :md="6" :lg="6" :xl="6"
-      ><div class="grid-content bg-purple"></div
-    ></el-col>
-    <el-col :xs="18" :sm="18" :md="18" :lg="18" :xl="18"
-      ><div class="grid-content bg-purple-light"></div
-    ></el-col> -->
-  <!-- <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="11"
-      ><div class="grid-content bg-purple"></div
-    ></el-col>
-    <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="1"
-      ><div class="grid-content bg-purple-light"></div
-    ></el-col> -->
-  <!-- </el-row> -->
   <div class="template-layout">
     <el-container class="template-layout__container">
       <el-aside class="aside">
-        <div class="aside-tab"></div>
+        <div class="aside-tab">
+          <el-dropdown>
+            <span class="el-dropdown-link">
+              Dropdown List<i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+          </el-dropdown>
+        </div>
         <div class="order-list">
-          <div v-for="i in 15" :key="i" class="order-item">
-            <div class="order-item__content">
-              <div class="order-item__content-rest">Хиба</div>
-
-              <div class="order-item__content-state">Новый заказ</div>
-
-              <div class="order-item__content-price">600 ₽ + 100 ₽</div>
-            </div>
-            <el-progress
-              :width="100"
-              type="circle"
-              :format="format"
-            ></el-progress>
-          </div>
+          <OrderItem v-for="(i, key) in 15" :key="key" />
+          <!-- v-for="(i, key) in 15" :key="key" 
+          <OrderItem name="Хиба" title="Новый" sum="500" />
+          <OrderItem name="aSKDJHKAJSDHK" title="weqwqe" sum="650506" /> -->
         </div>
       </el-aside>
       <el-container>
@@ -39,9 +21,15 @@
           <AppNavMenuVue />
         </el-header>
         <el-main class="template-layout__main">
+          <!-- ORDER SECTION -->
           <section class="section section-order">
             <div class="section-tags">
-              <el-tag class="section-tag" type="danger" effect="dark">
+              <el-tag
+                class="section-tag"
+                type="notice"
+                color="#FF3358"
+                effect="dark"
+              >
                 Новый
               </el-tag>
               <el-tag class="section-tag" type="info" effect="dark">
@@ -152,21 +140,18 @@
 
 <script lang="ts">
 import AppNavMenuVue from '@/components/AppNavMenu.vue';
+import OrderItem from '@/components/OrderItem.vue';
 import { defineComponent } from 'vue';
-
 export default defineComponent({
   setup() {
-    function format(percentage: number) {
-      return `${percentage}`;
-    }
-    return { format };
+    return {};
   },
   components: {
-    AppNavMenuVue
+    AppNavMenuVue,
+    OrderItem
   }
 });
 </script>
-
 <style lang="scss" scoped>
 .template-layout {
   &__container {
@@ -198,38 +183,6 @@ export default defineComponent({
 .order-list {
   overflow-y: auto;
 }
-.order-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px;
-  border-bottom: 2px solid #f1f1f1;
-  &__content-rest {
-    font-size: 12px;
-    line-height: 16px;
-  }
-  &__content-state {
-    font-weight: bold;
-    font-size: 16px;
-    line-height: 22px;
-  }
-  &__content-price {
-    color: #8e8e8e;
-    font-size: 14px;
-    line-height: 19px;
-  }
-  &__circle {
-    width: 48px;
-    height: 48px;
-    border: 2px solid #ff3358;
-    // transform: matrix(-1, 0, 0, 1, 0, 0);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-}
-
 .section-tag:not(:last-child) {
   margin-right: 10px;
 }
@@ -362,20 +315,4 @@ export default defineComponent({
     line-height: 22px;
   }
 }
-// .el-col {
-//   border-radius: 4px;
-// }
-// .bg-purple-dark {
-//   background: #99a9bf;
-// }
-// .bg-purple {
-//   background: #d3dce6;
-// }
-// .bg-purple-light {
-//   background: #e5e9f2;
-// }
-// .grid-content {
-//   border-radius: 4px;
-//   min-height: 36px;
-// }
 </style>
