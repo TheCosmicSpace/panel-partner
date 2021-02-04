@@ -1,0 +1,9 @@
+/* theme color */
+$--color-success: #09B44D;
+$--color-warning: #FFB800;
+$--color-danger: #FF0000;
+$--color-notice: #FF3358;
+/* icon font path, required */
+$--font-path: '~element-plus/lib/theme-chalk/fonts';
+
+@import "~element-plus/packages/theme-chalk/src/index";
