@@ -21,6 +21,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/company-profile',
     name: 'CompanyProfile',
     component: () => import('../views/CompanyProfile.vue')
+  },
+  {
+    path: '/auth',
+    name: 'AuthPage',
+    component: () => import('../views/AuthPage.vue')
   }
 ];
 
