@@ -1,19 +1,14 @@
 <template>
-  <MainLayoutVue v-if="false" />
-  <TemplateLayoutVue v-if="false" />
-  <AuthPage />
+  <MainLayoutVue />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import MainLayoutVue from './layouts/MainLayout.vue';
-import TemplateLayoutVue from './layouts/TemplateLayout.vue';
-import AuthPage from './views/AuthPage.vue';
+
 export default defineComponent({
   components: {
-    MainLayoutVue,
-    TemplateLayoutVue,
-    AuthPage
+    MainLayoutVue
   },
   name: 'App'
 });
