@@ -11,6 +11,9 @@
     <el-menu-item index="2">История</el-menu-item>
     <el-menu-item index="3">Каталог</el-menu-item>
     <el-menu-item index="4">Профиль компании</el-menu-item>
+    <!-- <el-menu-item index="5">
+      <div class="menu-burger"></div>
+    </el-menu-item> -->
   </el-menu>
 </template>
 
@@ -44,5 +47,13 @@ export default defineComponent({
 .el-menu-demo {
   font-weight: bold;
   font-size: 16px;
+  padding: 0 20px;
+}
+.menu-burger {
+  width: 86px;
+  height: 100%;
+  background-color: red;
+  border-left: 2px solid #f1f1f1;
+  margin-left: auto;
 }
 </style>
