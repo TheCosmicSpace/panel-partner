@@ -1,7 +1,9 @@
 <template>
   <div class="order-item">
     <div class="order-item__content">
-      <div class="order-item__content-rest">Хиба</div>
+      <div class="order-item__content-rest">
+        Бейрут (ул. Владикавказская, 11)
+      </div>
 
       <div class="order-item__content-state">Новый заказ</div>
 
@@ -65,7 +67,6 @@ export default defineComponent({
     width: 48px;
     height: 48px;
     border: 2px solid #ff3358;
-    // transform: matrix(-1, 0, 0, 1, 0, 0);
     border-radius: 50%;
     display: flex;
     align-items: center;
