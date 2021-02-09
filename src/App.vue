@@ -1,14 +1,20 @@
 <template>
-  <MainLayoutVue />
+  <router-view />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import MainLayoutVue from './layouts/MainLayout.vue';
+
+import { useStore } from '@/store';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
-  components: {
-    MainLayoutVue
+  setup() {
+    const store = useStore();
+    const router = useRouter();
+    console.log(store.getters.isAuthUser);
+    if (!store.getters.isAuthUser) router.push({ name: 'AuthPage' });
+    return {};
   },
   name: 'App'
 });
