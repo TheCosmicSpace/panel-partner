@@ -1,10 +1,14 @@
+import { Auth } from '@/data/api/model/auth';
+
 export type State = {
-  user: object | string | null;
+  userID: string;
+  token: string;
 };
 
-let userData = localStorage.getItem('userData');
-if (userData) userData = JSON.parse(userData);
+const localUserData = localStorage.getItem('userData');
+const userData: Auth = localUserData ? JSON.parse(localUserData) : {};
 
 export const state: State = {
-  user: userData
+  userID: userData.user_uuid,
+  token: userData.token
 };

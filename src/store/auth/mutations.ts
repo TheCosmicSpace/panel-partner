@@ -4,12 +4,12 @@ import { State } from './state';
 
 // Mutations Types
 export type Mutations<S = State> = {
-  [MutationTypes.SET_USER](state: S, payload: object): void;
+  [MutationTypes.SET_USER_ID](state: S, payload: string): void;
 };
 
 // define mutations
 export const mutations: MutationTree<State> & Mutations = {
-  [MutationTypes.SET_USER](state: State, payload: object) {
-    state.user = payload;
+  [MutationTypes.SET_USER_ID](state: State, payload: string) {
+    state.userID = payload;
   }
 };

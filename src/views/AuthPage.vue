@@ -25,7 +25,7 @@
         </div>
         <p class="auth-form__verify-title">
           Введите код, который был отправлен на номер <br />
-          <span class="auth-form__verify-phone"> +7 (918) 888-88-88</span>
+          <span class="auth-form__verify-phone">{{ user.phone }}</span>
         </p>
         <!-- Code Input -->
         <el-form-item>
@@ -66,13 +66,15 @@
           <span class="logo-food">food</span>
         </div>
         <!-- Phone Input -->
+        {{ user.phone }}
         <el-form-item>
           <el-input
+            ref="phoneInput"
             class="phone-input"
             v-model="user.phone"
             type="phone"
             autocomplete="off"
-            placeholder="Номер телефона"
+            placeholder="Логин или номер телефона"
           ></el-input>
         </el-form-item>
         <!-- Password Input -->
@@ -107,16 +109,22 @@
 </template>
 
 <script lang="ts">
+import router from '@/router';
 import { useStore } from '@/store';
+import { ActionTypes } from '@/store/auth/action-types';
 import { defineComponent, reactive, onMounted, ref } from 'vue';
 import { useInputMask } from '../use/mask';
-
 export default defineComponent({
   setup() {
     const store = useStore();
+    console.log(store);
+    const phoneInput = ref(null);
+    const { createMask } = useInputMask('.phone-input > input', {
+      mask: '+{7}(000)000-00-00'
+    });
     const user = reactive({
-      phone: '',
-      password: '',
+      phone: 'aslan',
+      password: '111111',
       code: ''
     });
     const authState = ref('signin');
@@ -124,9 +132,21 @@ export default defineComponent({
     const submitSignUp = () => {
       console.log('signUpSubmit');
     };
-    const submitSignIn = () => {
+    const submitSignIn = async () => {
       console.log('signInSubmit');
-      authState.value = 'verifycode';
+
+      // user.phone = user.phone.replace(/[a-zA-Z]/gi, '').slice(0, 16);
+      // authState.value = 'verifycode';
+      try {
+        await store.dispatch(ActionTypes.AUTH_USER, {
+          login: user.phone,
+          password: user.password
+        });
+        router.push({ name: 'OrderPage' });
+      } catch (e) {
+        console.log(e);
+      }
+      console.log(user.phone);
     };
     const submitVerifyCode = () => {
       console.log('verifyCodeSubmit');
@@ -134,13 +154,11 @@ export default defineComponent({
     const cancelVerifyCode = () => {
       console.log('cancelVerifyCode');
       authState.value = 'signin';
+      setTimeout(createMask, 0);
     };
-
-    const { createMask } = useInputMask('.phone-input > input', {
-      mask: '+{7}(000)000-00-00'
-    });
     onMounted(() => {
-      createMask();
+      console.log(phoneInput.value);
+      // createMask();
     });
 
     return {
@@ -149,7 +167,8 @@ export default defineComponent({
       submitSignIn,
       submitSignUp,
       submitVerifyCode,
-      cancelVerifyCode
+      cancelVerifyCode,
+      phoneInput
     };
   }
 });

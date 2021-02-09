@@ -5,11 +5,11 @@ import { State } from './state';
 // Getters types
 export type Getters = {
   isAuthUser(state: State): boolean;
-  getUser(state: State): object | string | null;
+  getUserID(state: State): string | null;
 };
 
 //getters
 export const getters: GetterTree<State, RootState> & Getters = {
-  isAuthUser: state => !!state.user,
-  getUser: state => state.user
+  isAuthUser: state => !!state.userID,
+  getUserID: state => state.userID
 };
