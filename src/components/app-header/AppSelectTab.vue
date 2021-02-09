@@ -66,6 +66,7 @@ export default defineComponent({
       border: none;
       font-weight: bold;
       font-size: 19px;
+      font-family: 'Uni Neue';
       &::placeholder {
         color: #000000;
       }
