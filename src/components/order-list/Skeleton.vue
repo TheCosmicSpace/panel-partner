@@ -2,7 +2,7 @@
   <el-skeleton v-bind="$attrs">
     <template #template>
       <div
-        style="padding: 14px; display: flex; align-items: center; justify-content: space-between;"
+        style="padding: 14px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #f1f1f1; "
       >
         <div style="width: 80%;">
           <el-skeleton-item variant="h3" style="width: 70%;" />
