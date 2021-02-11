@@ -1,0 +1,4 @@
+export enum MutationTypes {
+  SET_ORDERS_IN_PROCESS = 'SET_ORDERS_IN_PROCESS',
+  SET_ACTIVE_ORDER = 'SET_ACTIVE_ORDER'
+}

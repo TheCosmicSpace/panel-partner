@@ -6,14 +6,17 @@ import {
 } from './module-example';
 
 import { store as auth, AuthStore, State as AuthState } from './auth';
+import { store as order, OrderStore, State as OrderState } from './order';
 
 export type RootState = {
   counter: CounterState;
   auth: AuthState;
+  order: OrderState;
 };
 
 export type Store = CounterStore<Pick<RootState, 'counter'>> &
-  AuthStore<Pick<RootState, 'auth'>>;
+  AuthStore<Pick<RootState, 'auth'>> &
+  OrderStore<Pick<RootState, 'order'>>;
 
 const debug = process.env.NODE_ENV !== 'production';
 const plugins = debug ? [createLogger({})] : [];
@@ -22,7 +25,8 @@ export const store = createStore({
   plugins,
   modules: {
     counter,
-    auth
+    auth,
+    order
   }
 });
 
