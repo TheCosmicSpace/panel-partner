@@ -5,7 +5,7 @@ import { State } from './state';
 // Getters types
 export type Getters = {
   isAuthUser(state: State): boolean;
-  getUserID(state: State): string | null;
+  getUserID(state: State): string;
 };
 
 //getters
