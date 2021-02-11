@@ -1,35 +1,57 @@
 <template>
-  <div class="order-item">
-    <div class="order-item__content">
-      <div class="order-item__content-rest">
-        Бейрут (ул. Владикавказская, 11)
+  <button @click="handleSelectActiveOrder" class="order-item-wrap">
+    <div class="order-item">
+      <div class="order-item__content">
+        <div class="order-item__content-rest">
+          {{ orderItem.store_data.name }}
+        </div>
+
+        <div class="order-item__content-state">Новый заказ</div>
+
+        <div class="order-item__content-price">
+          {{ orderItem.total_price }} ₽
+          <span v-if="!orderItem.without_delivery">
+            + {{ orderItem.delivery_price }} ₽
+          </span>
+        </div>
       </div>
-
-      <div class="order-item__content-state">Новый заказ</div>
-
-      <div class="order-item__content-price">600 ₽ + 100 ₽</div>
+      <el-progress
+        class="my-own-progress"
+        :percentage="70"
+        :width="50"
+        type="circle"
+        :format="format"
+        :stroke-width="3"
+        color="#09B44D"
+      ></el-progress>
     </div>
-    <el-progress
-      class="my-own-progress"
-      :percentage="70"
-      :width="50"
-      type="circle"
-      :format="format"
-      :stroke-width="4"
-      color="#09B44D"
-    ></el-progress>
-  </div>
+  </button>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, PropType } from 'vue';
+import { useStore } from '@/store';
+import { Order } from '@/data/api/model';
+import { MutationTypes } from '@/store/order/mutation-types';
+
 export default defineComponent({
-  props: ['name', 'title', 'sum'],
-  setup() {
+  props: {
+    orderItem: {
+      type: Object as PropType<Order>,
+      required: true,
+      default: () => ({})
+    }
+  },
+  setup(props) {
+    const store = useStore();
     function format(percentage: number) {
       return `${percentage}`;
     }
-    return { format };
+    const handleSelectActiveOrder = () => {
+      store.commit(MutationTypes.SET_ACTIVE_ORDER, props.orderItem);
+      console.log(props.orderItem);
+    };
+    return { format, handleSelectActiveOrder };
   },
   name: 'OrderItem'
 });
@@ -43,12 +65,21 @@ export default defineComponent({
 }
 </style>
 <style lang="scss" scoped>
+.order-item-wrap {
+  display: contents;
+  text-align: left;
+  cursor: pointer;
+}
 .order-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 20px;
   border-bottom: 2px solid #f1f1f1;
+  transition: background-color 0.25s;
+  &:hover {
+    background-color: #f1f1f1;
+  }
   &__content-rest {
     font-size: 12px;
     line-height: 16px;
