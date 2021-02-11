@@ -2,24 +2,35 @@
   <div class="cart-product">
     <div class="cart-product__info">
       <div class="cart-product__title">
-        1 × Чизкейк Нью-Йорк
-        <span class="cart-product__weight"> 300 г.</span>
+        {{ cartItem.count }} × {{ cartItem.product?.name }}
+        <span class="cart-product__weight">
+          {{ cartItem.product?.weight }}
+          {{ cartItem.product?.weight_measurement }}.
+        </span>
       </div>
-      <div class="cart-product__price">350 ₽</div>
+      <div class="cart-product__price">{{ cartItem.product?.price }} ₽</div>
     </div>
-    <div class="cart-product-toppings">
+    <!-- <div class="cart-product-toppings">
       <div class="cart-product-toppings__title">
         Халапеньо
       </div>
       <div class="cart-product-toppings__price">+15 ₽</div>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { Item } from '@/data/api/model';
+import { defineComponent, PropType } from 'vue';
 
 export default defineComponent({
+  props: {
+    cartItem: {
+      type: Object as PropType<Item>,
+      required: true,
+      default: () => ({})
+    }
+  },
   setup() {
     return {};
   },

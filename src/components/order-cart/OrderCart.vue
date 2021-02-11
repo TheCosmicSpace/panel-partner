@@ -10,18 +10,28 @@
       </div>
     </div>
     <div class="cart-products order-cart__products">
-      <OrderCartItem />
-      <OrderCartItem />
-      <OrderCartItem />
+      <OrderCartItem
+        v-for="cartItem in cartItems"
+        :key="cartItem.id"
+        :cart-item="cartItem"
+      />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, PropType } from 'vue';
+import { Item } from '@/data/api/model';
 import OrderCartItem from './Item.vue';
 
 export default defineComponent({
+  props: {
+    cartItems: {
+      type: Array as PropType<Item[]>,
+      required: true,
+      default: () => []
+    }
+  },
   setup() {
     return {};
   },
