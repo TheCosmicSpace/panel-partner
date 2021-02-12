@@ -12,8 +12,8 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, PropType } from 'vue';
 import { Order } from '@/data/api/model';
-import { computed, defineComponent, PropType, watch } from 'vue';
 import OrderItem from './Item.vue';
 
 export default defineComponent({
@@ -28,7 +28,7 @@ export default defineComponent({
       default: () => []
     }
   },
-  setup(props) {
+  setup() {
     enum stateDictionary {
       cart = 'товар добавлен в корзину',
       payment = 'оплата заказа',
@@ -39,20 +39,6 @@ export default defineComponent({
       finished = 'заказ выполнен',
       cancelled = 'заказ отменен'
     }
-    // watch(
-    //   // getter
-    //   () => props,
-    //   // callback
-    //   () => {
-    //     console.log('PROPS', props);
-    //   },
-    //   {}
-    //   // watch Options
-    // );
-    // watch(() => {
-    //   console.log(props);
-    // });
-    console.warn('GROUP SEtuP: ', props.orderGroup);
     return { stateDictionary };
   },
   name: 'OrderGroup',

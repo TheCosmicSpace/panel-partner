@@ -34,6 +34,8 @@ export default defineComponent({
   setup() {
     const store = useStore();
     const groupsOrder = reactive({
+      created: [] as Order[],
+      cooking: [] as Order[],
       ready: [] as Order[],
       delivery: [] as Order[]
     });
@@ -44,38 +46,25 @@ export default defineComponent({
         const filtered = getOrdersInProcess.value?.filter(
           el => el.state === key
         ) as Order[];
-        console.warn('FILTERED', filtered);
-        console.warn(key, value);
-
         value.push(...filtered);
       }
-      console.log(groupsOrder);
     }
 
     onMounted(async () => {
       loading.value = true;
       await store.dispatch(ActionTypes.FETCH_ORDERS_IN_PROCESS, undefined);
       loading.value = false;
-      // groupsOrder.ready = getOrdersInProcess.value?.filter(
-      //   el => el.state === 'ready'
-      // ) as Order[];
       groupingOrders();
-      // groupsOrder.ready = (getOrdersInProcess.value as []) || [];
       console.warn(groupsOrder);
     });
     const isEmptyOrderList = computed(() => {
-      console.warn('===', groupsOrder);
       return !Object.values(groupsOrder).reduce(
         (acc, group) => acc + group.length,
         0
       );
     });
-    console.warn(isEmptyOrderList.value, groupsOrder);
 
-    const handleSelectOrder = (order: Order) => {
-      console.log('handleSelectOrder', order);
-    };
-    return { groupsOrder, isEmptyOrderList, handleSelectOrder, loading };
+    return { groupsOrder, isEmptyOrderList, loading };
   },
   name: 'OrderList',
   components: { OrderGroup, OrderSkeleton }
