@@ -1,5 +1,5 @@
 export const urlStateMachine = new Map<string, string>([
-  ['created', 'cooking'],
+  ['created', 'accept'],
   ['cooking', 'ready'],
   ['ready', 'delivery'],
   ['delivery', 'finish'],
