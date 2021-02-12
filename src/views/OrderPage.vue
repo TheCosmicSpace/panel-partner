@@ -8,21 +8,50 @@
     ></el-empty>
     <el-main v-else class="main-layout__main">
       <section class="order-page section">
+        <!-- Other component tag -->
         <div class="section-tags">
           <el-tag
-            class="section-tag"
+            v-if="states.isCreated"
+            class="section-tag created"
             type="notice"
             color="#FF3358"
             effect="dark"
           >
             Новый
           </el-tag>
+          <el-tag
+            v-if="states.isCooking"
+            type="warning"
+            effect="dark"
+            class="section-tag"
+          >
+            Готовится
+          </el-tag>
+          <el-tag
+            v-if="states.isReady"
+            type="primary"
+            effect="dark"
+            class="section-tag"
+          >
+            Курьер в пути
+          </el-tag>
+          <el-tag
+            v-if="states.isDelivery"
+            type="success"
+            effect="dark"
+            class="section-tag"
+          >
+            Передан курьеру
+          </el-tag>
           <el-tag class="section-tag" type="info">
             Доставка
           </el-tag>
         </div>
         <hgroup class="order-hgroup">
-          <h1 class="section__title">№{{ activeOrder.id }}</h1>
+          <h1 class="section__title">
+            <span v-if="states.isCreated">Новый заказ</span>
+            <span v-else>№{{ activeOrder.id }}</span>
+          </h1>
           <p class="section__subtitle">{{ activeOrder.store_data.name }}</p>
         </hgroup>
         <div class="order-info">
@@ -35,7 +64,7 @@
                 </a>
               </div>
             </div>
-            <div class="order-info__item">
+            <div v-if="!states.isCreated" class="order-info__item">
               <div class="order-info__item-label">Телефон курьера</div>
               <div class="order-info__item-text">Идет поиск курьера</div>
             </div>
@@ -53,13 +82,13 @@
                 </span>
               </div>
             </div>
-            <div class="order-info__item">
+            <div v-if="!states.isCreated" class="order-info__item">
               <div class="order-info__item-label">Приготовить к</div>
-              <div class="order-info__item-text">14:00</div>
+              <div class="order-info__item-text">{{ cookingToTime }}</div>
             </div>
           </div>
         </div>
-        <div class="order-controls">
+        <div v-if="!states.isFinish && !states.isCancle" class="order-controls">
           <el-button
             @click="handleNextStepOrder"
             class="order-btn"
@@ -76,12 +105,18 @@
         <OrderCart :cart-items="activeOrder.items" />
       </section>
     </el-main>
+    <CookingTimeDialog
+      v-model="cookingTimeDialogVisible"
+      @selectedCookingTime="acceptCreatedOrder"
+      @close="cookingTimeDialogVisible = false"
+    />
   </el-container>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import { useStore } from '@/store';
+import { ActionTypes } from '@/store/order/action-types';
 import {
   urlStateMachine,
   textStateMachine
@@ -89,7 +124,8 @@ import {
 
 import OrderList from '@/components/order-list/List.vue';
 import OrderCart from '@/components/order-cart/OrderCart.vue';
-import { ActionTypes } from '@/store/order/action-types';
+import CookingTimeDialog from '@/components/CookingTimeDialog.vue';
+
 export default defineComponent({
   setup() {
     const store = useStore();
@@ -98,24 +134,60 @@ export default defineComponent({
       const state = activeOrder.value?.state;
       return state ? textStateMachine.get(state) : {};
     });
+    const states = computed(() => {
+      return {
+        isCreated: activeOrder.value?.state === 'created',
+        isCooking: activeOrder.value?.state === 'cooking',
+        isReady: activeOrder.value?.state === 'ready',
+        isDelivery: activeOrder.value?.state === 'delivery',
+        isFinished: activeOrder.value?.state === 'finished',
+        isCancelled: activeOrder.value?.state === 'cancelled'
+      };
+    });
+    const cookingTimeDialogVisible = ref(false);
+    const acceptCreatedOrder = (cookingTime: number) => {
+      const state = activeOrder.value?.state;
+      if (!state) return;
+      store.dispatch(ActionTypes.UPDATE_ORDER_STATE, {
+        uuid: activeOrder.value?.uuid as string,
+        path: urlStateMachine.get(state) as string,
+        cookingTime: cookingTime
+      });
+    };
+    const cookingToTime = computed(() => {
+      const dt = new Date();
+      const cookingTime = activeOrder.value?.cooking_time;
+      if (cookingTime === undefined) return;
+      dt.setMinutes(dt.getMinutes() + cookingTime);
+      return dt.toLocaleString('ru', {
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    });
     const handleNextStepOrder = () => {
       const state = activeOrder.value?.state;
       if (!state) return;
-      console.log('handleNextStepOrder', urlStateMachine.get(state));
+      if (states.value.isCreated) {
+        return (cookingTimeDialogVisible.value = true);
+      }
       store.dispatch(ActionTypes.UPDATE_ORDER_STATE, {
         uuid: activeOrder.value?.uuid as string,
         path: urlStateMachine.get(state) as string
       });
     };
     const handleCancelOrder = () => {
-      console.log(
-        'handleCancelOrder',
-        activeOrder.value?.uuid,
-        urlStateMachine.get('cancel')
-      );
+      const state = activeOrder.value?.state;
+      if (!state) return;
+      store.dispatch(ActionTypes.UPDATE_ORDER_STATE, {
+        uuid: activeOrder.value?.uuid as string,
+        path: 'cancel'
+      });
     };
-
     return {
+      cookingTimeDialogVisible,
+      cookingToTime,
+      acceptCreatedOrder,
+      states,
       activeOrder,
       btnsText,
       handleCancelOrder,
@@ -123,14 +195,17 @@ export default defineComponent({
     };
   },
   name: 'OrderPage',
-  components: { OrderList, OrderCart }
+  components: { OrderList, OrderCart, CookingTimeDialog }
 });
 </script>
 
 <style lang="scss" scoped>
-.section-tag:not(:last-child) {
+.section-tag {
   margin-right: 10px;
-  border-color: #ff3358;
+  font-weight: bold;
+  &.created {
+    border-color: #ff3358;
+  }
 }
 .section {
   max-width: 1080px;
