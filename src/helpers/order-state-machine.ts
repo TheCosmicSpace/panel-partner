@@ -17,6 +17,6 @@ export const textStateMachine = new Map<string, TextSM>([
   ['cooking', { next: 'Заказ готов', cancel: 'Отменить заказ' }],
   ['ready', { next: 'Поиск курьера', cancel: 'Отменить заказ' }],
   ['delivery', { next: 'Заказ передан курьеру', cancel: 'Отменить заказ' }],
-  ['finish', { next: '', cancel: '' }],
-  ['cancel', { next: '', cancel: '' }]
+  ['finished', { next: '', cancel: '' }],
+  ['cancelled', { next: '', cancel: '' }]
 ]);
