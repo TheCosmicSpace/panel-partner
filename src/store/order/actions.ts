@@ -1,3 +1,4 @@
+import { Order } from '@/data/api/model';
 import { ActionContext, ActionTree } from 'vuex';
 import { RootState } from '..';
 import { ActionTypes } from './action-types';
@@ -24,7 +25,7 @@ export interface Actions {
 
   [ActionTypes.UPDATE_ORDER_STATE](
     { commit }: AugmentedActionContext,
-    payload: { uuid: string; path: string }
+    payload: { uuid: string; path: string; cookingTime?: number }
   ): void;
 }
 
@@ -35,12 +36,15 @@ export const actions: ActionTree<State, RootState> & Actions = {
   },
   async [ActionTypes.UPDATE_ORDER_STATE](
     { commit },
-    payload: { uuid: string; path: string }
+    payload: { uuid: string; path: string; cookingTime?: number }
   ) {
     const data = await orderService.updateStateOrder(
       payload.uuid,
-      payload.path
+      payload.path,
+      payload.cookingTime
     );
-    commit(MutationTypes.SET_ACTIVE_ORDER, data);
+    // wtf
+    if ('uuid' in data) commit(MutationTypes.SET_ACTIVE_ORDER, data);
+    else commit(MutationTypes.SET_ACTIVE_ORDER, null);
   }
 };

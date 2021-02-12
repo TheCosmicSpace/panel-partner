@@ -18,8 +18,14 @@ class OrderService extends HttpClient {
   public getOrdersInProcess = () =>
     this.instance.get<Order[]>('/orders/filter/in_process');
 
-  public updateStateOrder = (uuid: string, path: string) => {
-    return this.instance.put<Order>(`/orders/${uuid}/${path}`);
+  public updateStateOrder = (
+    uuid: string,
+    path: string,
+    cookingTime?: number
+  ) => {
+    return this.instance.put<Order>(`/orders/${uuid}/${path}`, {
+      cooking_time: cookingTime
+    });
   };
 }
 
