@@ -11,6 +11,8 @@ export type Mutations<S = State> = {
   ): void;
 
   [MutationTypes.SET_ACTIVE_ORDER](state: S, activeOrder: Order | null): void;
+
+  [MutationTypes.GROUPING_ORDERS](state: S): void;
 };
 
 // define mutations
@@ -20,5 +22,19 @@ export const mutations: MutationTree<State> & Mutations = {
   },
   [MutationTypes.SET_ACTIVE_ORDER](state: State, activeOrder: Order | null) {
     state.activeOrder = activeOrder;
+  },
+  [MutationTypes.GROUPING_ORDERS](state: State) {
+    if (!state.ordersInProcess) return;
+    // Clean prev state orders
+    for (const key of Object.keys(state.groupsOrder)) {
+      state.groupsOrder[key] = [];
+    }
+    // Grouping by state
+    for (const [key, value] of Object.entries(state.groupsOrder)) {
+      const filtered = state.ordersInProcess.filter(
+        el => el.state === key
+      ) as Order[];
+      value.push(...filtered);
+    }
   }
 };

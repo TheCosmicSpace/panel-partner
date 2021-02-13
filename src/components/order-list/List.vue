@@ -22,10 +22,10 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, reactive, ref } from 'vue';
+import { computed, defineComponent, onMounted, ref } from 'vue';
 import { useStore } from '@/store';
 import { ActionTypes } from '@/store/order/action-types';
-import { Order } from '@/data/api/model';
+import { MutationTypes } from '@/store/order/mutation-types';
 
 import OrderGroup from './Group.vue';
 import OrderSkeleton from './Skeleton.vue';
@@ -33,35 +33,18 @@ import OrderSkeleton from './Skeleton.vue';
 export default defineComponent({
   setup() {
     const store = useStore();
-    const groupsOrder = reactive({
-      created: [] as Order[],
-      cooking: [] as Order[],
-      ready: [] as Order[],
-      delivery: [] as Order[]
-    });
     const loading = ref(false);
-    const getOrdersInProcess = computed(() => store.getters.getOrdersInProcess);
-    function groupingOrders() {
-      for (const [key, value] of Object.entries(groupsOrder)) {
-        const filtered = getOrdersInProcess.value?.filter(
-          el => el.state === key
-        ) as Order[];
-        value.push(...filtered);
-      }
-    }
+    const groupsOrder = computed(() => store.getters.getGroupsOrder);
+    const isEmptyOrderList = computed(
+      () => store.getters.isEmptyOrdersInProcess
+    );
 
     onMounted(async () => {
       loading.value = true;
       await store.dispatch(ActionTypes.FETCH_ORDERS_IN_PROCESS, undefined);
       loading.value = false;
-      groupingOrders();
+      store.commit(MutationTypes.GROUPING_ORDERS, undefined);
       console.warn(groupsOrder);
-    });
-    const isEmptyOrderList = computed(() => {
-      return !Object.values(groupsOrder).reduce(
-        (acc, group) => acc + group.length,
-        0
-      );
     });
 
     return { groupsOrder, isEmptyOrderList, loading };
