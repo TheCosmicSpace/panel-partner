@@ -1,14 +1,14 @@
-import { Auth } from '@/data/api/model';
+import LocalStorageService from '@/data/api/service/local-storage';
 
 export type State = {
   userID: string;
   token: string;
 };
 
-const localUserData = localStorage.getItem('userData');
-const userData: Auth = localUserData ? JSON.parse(localUserData) : {};
+const userID = LocalStorageService.getUserID() || '';
+const accessToken = LocalStorageService.getAccessToken() || '';
 
 export const state: State = {
-  userID: userData.user_uuid || '',
-  token: userData.token || ''
+  userID: userID,
+  token: accessToken
 };

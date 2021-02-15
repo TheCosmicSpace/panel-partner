@@ -6,6 +6,7 @@ import { Mutations } from './mutations';
 import { State } from './state';
 
 import AuthService from '@/data/api/service/auth';
+import LocalStorageService from '@/data/api/service/local-storage';
 const authService = AuthService.getInstance();
 
 type AugmentedActionContext = {
@@ -31,7 +32,7 @@ export const actions: ActionTree<State, RootState> & Actions = {
   ) {
     // AuthService
     const data = await authService.authUser(payload.login, payload.password);
-    localStorage.setItem('userData', JSON.stringify(data));
+    LocalStorageService.setToken(data);
     commit(MutationTypes.SET_USER_ID, data.user_uuid);
   }
 };

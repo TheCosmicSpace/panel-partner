@@ -5,6 +5,7 @@ import axios, {
   AxiosResponse
 } from 'axios';
 
+import LocalStorageService from './local-storage';
 declare module 'axios' {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface AxiosResponse<T = any> extends Promise<T> {}
@@ -37,10 +38,8 @@ abstract class HttpClient {
   };
 
   private _handleRequest = (config: AxiosRequestConfig) => {
-    // tmp
-    const localUserData = localStorage.getItem('userData');
-    const userData = localUserData ? JSON.parse(localUserData) : {};
-    config.headers['Authorization'] = `Bearer ${userData.token}`;
+    const accessToken = LocalStorageService.getAccessToken();
+    config.headers['Authorization'] = `Bearer ${accessToken}`;
     return config;
   };
 
